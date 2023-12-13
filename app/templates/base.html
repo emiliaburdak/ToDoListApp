@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+
+    />
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            crossorigin="anonymous"
+    />
+
+
+    <title>{% block title %}Home{% endblock %}</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+            {% if user.is_authenticated %}
+            <a class="nav-item nav-link" id="home" href="/">Home</a>
+            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+
+            <form action='/delete_hashtag_bookmark' method="post">
+                <button type="submit" class="btn btn-outline-secondary">Delete Empty Bookmarks</button>
+            </form>
+
+
+            <div class="ms-auto">
+                <div class="nav-item" align="left">
+                    <span class="nav-link text-white"
+                          id="date-time">{{ current_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </span>
+                </div>
+            </div>
+
+            <form method="GET" action="{{ url_for('views.search') }}" class="d-flex" role="search">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search"
+                       id="search">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
+
+
+            {% else %}
+            <a class="nav-item nav-link" id="login" href="/login">Login</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign_up">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+
+
+        {% if user.is_authenticated %}
+    <li><a href="/category?name=home" class="nav-link active" aria-current="page">Home Staff</a></li>
+    <li><a href="/category?name=work" class="nav-link active" aria-current="page">Work Staff</a></li>
+    <li><a href="/category?name=personal" class="nav-link active" aria-current="page">Personal Staff</a></li>
+    {% endif %}
+
+    </li>
+</ul>
+
+<ul class="nav nav-tabs">
+    <li class=nav-item"">
+        {% if user.is_authenticated %}
+    <li><a href="/day?name=monday" class="nav-link active" aria-current="page">Monday</a></li>
+    <li><a href="/day?name=tuesday" class="nav-link active" aria-current="page">Tuesday</a></li>
+    <li><a href="/day?name=wednesday" class="nav-link active" aria-current="page">Wednesday</a></li>
+    <li><a href="/day?name=thursday" class="nav-link active" aria-current="page">Thursday</a></li>
+    <li><a href="/day?name=friday" class="nav-link active" aria-current="page">Friday</a></li>
+    <li><a href="/day?name=saturday" class="nav-link active" aria-current="page">Saturday</a></li>
+    <li><a href="/day?name=sunday" class="nav-link active" aria-current="page">Sunday</a></li>
+    {% endif %}
+    </li>
+</ul>
+
+
+<ul class="nav nav-tabs">
+    <li class=nav-item"">
+        {% if user.is_authenticated %}
+        {%for hashtag in hashtags%}
+    <li><a href="hashtag?name={{ hashtag.value }}" class="nav-link active" aria-current="page">{{hashtag.value}}</a>
+    </li>
+    {% endfor %}
+    {% endif %}
+    </li>
+</ul>
+
+
+<br>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category== 'error' %}
+<div class="alert alert-danger alter-dismissable fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% else %}
+<div class="alert alert-success alter-dismissable fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %} {% endfor %} {% endif %} {% endwith %}
+
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<script
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"
+></script>
+
+<script
+        type="text/javascript"
+        src="{{ url_for('static', filename='index.js') }}"
+></script>
+</body>
+</html>
+
+
+
+

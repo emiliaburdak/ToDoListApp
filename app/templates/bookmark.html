@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 align="center">{{ titles }}</h1>
+
+{% for note in notes %}
+
+    <li class="list-group-item d-flex align-items-center">
+
+        <div class="col-1">
+            {% if note.important %}
+
+            <button type="button" class="btn btn-sm btn-danger" onclick="mark_important({{ note.id }}, this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-exclamation-lg" viewBox="0 0 16 16">
+                    <path d="M7.005 3.1a1 1 0 1 1 1.99 0l-.388 6.35a.61.61 0 0 1-1.214 0L7.005 3.1ZM7 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
+                </svg>
+            </button>
+
+            {% else %}
+
+            <button type="button" class="btn btn-sm btn-white" onclick="mark_important({{ note.id }}, this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="bg-danger"
+                     class="bi bi-exclamation-lg" viewBox="0 0 16 16">
+                    <path d="M7.005 3.1a1 1 0 1 1 1.99 0l-.388 6.35a.61.61 0 0 1-1.214 0L7.005 3.1ZM7 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
+                </svg>
+            </button>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if note.complete %}
+        <input type="checkbox" checked value="{{ note.id }}" onclick="mark_update({{ note.id }})">
+        {% else %}
+        <input type="checkbox" value="{{ note.id }}" onclick="mark_update({{ note.id }})">
+        {% endif %}
+        <span class="flex-grow-1 mx-3 {{ 'text-muted' if note.completed else '' }}">{{ note.data }}</span>
+
+        <button type="button" class="btn btn-sm btn-white"
+                onclick="editNote({{ note.id }}, '{{ note.raw_text }}')">
+
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
+                 viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+            </svg>
+        </button>
+
+        <button type="button" class="close" onclick="deleteNote({{ note.id }})">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </li>
+
+
+{% endfor %}
+
+{% endblock %}
